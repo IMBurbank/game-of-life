@@ -1645,7 +1645,12 @@ var PageFooter = function (_React$Component11) {
 				React.createElement(
 					'span',
 					null,
-					'\xA9 2017 Isaac Burbank.'
+					'\xA9 2017\xA0',
+					React.createElement(
+						'a',
+						{ href: 'https://github.com/IMBurbank/game-of-life', target: '_blank' },
+						'Isaac Burbank.'
+					)
 				),
 				React.createElement(
 					'span',
@@ -1654,7 +1659,7 @@ var PageFooter = function (_React$Component11) {
 					React.createElement(
 						'a',
 						{ href: 'https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life', target: '_blank' },
-						'John Conway '
+						'John Conway'
 					)
 				)
 			);

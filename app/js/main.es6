@@ -1250,11 +1250,17 @@ class PageFooter extends React.Component {
 	render() {
 		return (
 			<div className='pg-footer'>
-				<span>© 2017 Isaac Burbank.</span>
+				<span>
+					© 2017&nbsp;
+					<a href='https://github.com/IMBurbank/game-of-life' target='_blank'>
+						Isaac Burbank.
+					</a>
+				</span>
 				<span>
 					Original By&nbsp;
 					<a href='https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life' target='_blank'>
-					John Conway </a>
+						John Conway
+					</a>
 				</span>
 			</div>
 		);
