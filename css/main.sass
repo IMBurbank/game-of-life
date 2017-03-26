@@ -1,0 +1,322 @@
+/**
+	*
+	*		Styled using SASS preprocessor
+	*
+	*/
+
+
+/**
+	*		Variables
+	*/
+
+$pg-width: 100vw
+$stage-width: 720px
+$stage-height: 540px
+$prim-color: rgb(16,16,16)
+$prim-bg-color: rgba(60,255,140,0.6)
+$sec-bg-color: rgba(0,0,0,0.9)
+$prim-font-color: black
+$sec-font-color: rgb(0,215,0)
+$prim-font: "Century Gothic", "HelveticaNeueLT Pro 45 Lt", sans-serif
+$head-font: 'VT323', monospace
+$prim-space: 0.25rem
+$prim-offset: 10px
+$lt-shadow-top: inset 2px 2px 3px 1px rgba(255,255,255,0.6)
+$drk-shadow-btm: 1px 1px 1px rgba(0,0,0,0.5)
+$engrave-shadow: 1px 1px 1px rgba(255,255,255,0.8), -0.5px -0.5px  rgba(0,0,0,0.6)
+
+//UI Variables
+$ui-offset: $prim-offset
+$thumb-height: 18px
+$thumb-width: 9px
+$track-height: 5px
+$track-width: 140px
+$zoom-range: 4
+$speed-range: 8
+$tick-offset: $thumb-width/2
+
+
+/**
+	*		Mixins
+	*/
+
+=bx-shadow($shadows...)
+	box-shadow: $shadows
+	&:active
+		padding: 0
+		box-shadow: 0 0 1px rgba(0,0,0,0.8)
+
+=engraved-text($font-color: $prim-font-color)
+	color: rgba($font-color, 0.65)
+	font-size: 105%
+	font-weight: bold
+	font-family: $prim-font
+	text-shadow: $engrave-shadow
+
+=metalic-bg($bg-color: white, $width: 90px)
+	$hue: hue($bg-color)
+	$sat: saturation($bg-color)
+	$lit: lightness($bg-color)
+	$scale: $width / 90px
+	background: repeating-linear-gradient(left, hsla($hue,$sat,$lit*100%,0) 0%, hsla($hue,$sat,$lit*100%,0) percentage(0.06 / $scale), hsla($hue,$sat,$lit*100%, .1) percentage(0.075 / $scale)), repeating-linear-gradient(left, hsla($hue,$sat,0%,0) 0%, hsla($hue,$sat,0%,0) percentage(0.04 / $scale), hsla($hue,$sat,0%,.03) percentage(0.045 / $scale)), repeating-linear-gradient(left, hsla($hue,$sat,$lit*100%,0) 0%, hsla($hue,$sat,$lit*100%,0) percentage(0.012 / $scale), hsla($hue,$sat,$lit*100%,.15) percentage(0.022 / $scale)), linear-gradient(hsl($hue,$sat,78%) 0%, hsl($hue,$sat,90%) 47%, hsl($hue,$sat,78%) 53%, hsl($hue,$sat,70%) 100%)
+
+=metal-btn($font-color: $prim-font-color, $bg-color: white)
+	$hue: hue($bg-color)
+	$sat: saturation($bg-color)
+	$width: 90px
+	+metalic-bg($bg-color, $width)
+	+engraved-text($font-color)
+	position: relative
+	padding: 0 1px 1px 0
+	height: 25px
+	width: $width
+	overflow: hidden
+	border: none
+
+	&:hover:before
+		@extend .before-setup
+		background: linear-gradient(hsla($hue,$sat,90%,0.6), hsla($hue,$sat,90%,0.2), hsla($hue,$sat,90%,0.4))
+
+=inset-screen-shadow($alpha: 1)
+	border-bottom: 1px solid rgba(255,255,255,$alpha)
+	border-right: 1px solid rgba(255,255,255,$alpha)
+
+
+/**
+	*		Classes to @extend
+	*/
+
+.head-foot-style
+	position: relative
+	width: 100%
+	min-width: $stage-width
+	margin: 0
+	padding: 2*$prim-space 0
+	text-align: center
+	background-color: $prim-color
+	color: $sec-font-color
+	font-family: $head-font
+
+.vis-canvas
+	position: absolute
+	top: 0
+	left: 0
+	margin:  0
+	padding: 0
+
+.before-setup
+	position: absolute
+	content: ""
+	left: 0
+	top: 0
+	width: 100%
+	height: 100%
+
+.slider-tick-styling
+	position: relative
+	width: $track-width
+	cursor: pointer
+	background: linear-gradient(to right, transparent $tick-offset - 1px, rgba(0,0,0,0.7) $tick-offset, grey $tick-offset + 1px, grey $tick-offset + 2px, white $tick-offset + 2px, transparent $tick-offset + 3px) repeat-x
+
+.slider-track-styling
+	height: $track-height
+	margin-top: calc((#{$thumb-height} - #{$track-height}) / 2)
+	background: rgba(32,32,32, 1)
+	box-shadow: $engrave-shadow
+
+.slider-thumb-styling
+	+metalic-bg(rgb(120,120,80), 9px)
+	+bx-shadow($lt-shadow-top, $drk-shadow-btm)
+	position: relative
+	height: $thumb-height
+	width: $thumb-width
+	border: 1px solid rgba(0,0,0,0.5)
+	border-radius: 2px
+
+
+/**
+	*		Styling
+	*/
+
+// reset sass
+html, body,
+div, p, span,
+button, select,
+ul, ol,
+h1, h2, h3, h4,
+	margin:  0
+	padding: 0
+
+.pg
+	display: flex
+	flex-direction: column
+	min-height: 100vh
+	width: 100%
+	min-width: $stage-width + 2.5*$prim-offset
+
+	&-header
+		@extend .head-foot-style
+
+	&-content
+		flex-grow: 1
+		width: 100%
+		text-align: center
+		background: radial-gradient(circle, $prim-bg-color, $sec-bg-color)
+
+	&-footer
+		@extend .head-foot-style
+		&> *:first-child
+			margin-right: 4*$prim-space
+		a
+			color: $sec-font-color
+
+.gm-container
+	+metalic-bg(white, $stage-width + 10px)
+	display: inline-block
+	position: relative
+	margin: 2em 0
+	padding: $prim-offset
+	border: 1px solid black
+	border-radius: 2*$prim-offset
+	text-align: center
+	user-select: none
+	box-shadow: inset 2px 2px 1px rgba(255,255,255,0.8), inset 2px 0 2px 1px rgba(0,0,0,0.5), inset -2px 0 2px 1px rgba(0,0,0,0.5), 2px 2px 3px 1px rgba(0,0,0,0.6),
+
+	&:before
+		@extend .before-setup
+		background: linear-gradient(to right, hsla(0,0%,30%,0.4), hsla(0,0%,100%,0.4), hsla(0,0%,30%,0.4))
+		border-radius: 4*$prim-space
+
+	.generation
+		+inset-screen-shadow($alpha: 1)
+		position: absolute
+		display: inline-block
+		transform: translate(-50%, 0)
+		background: $prim-color
+		width: 160px
+		border-radius: $prim-space/2
+		color: $sec-font-color
+		font-family: $head-font
+		font-size: 115%
+		font-weight: bold
+
+.stage
+	position: relative
+	width: $stage-width
+	height: $stage-height
+	border: 2px inset grey
+	margin: 8*$prim-space 0 16*$prim-space
+
+	.bg
+		@extend .vis-canvas
+		z-index: 2
+
+	.gm
+		@extend .vis-canvas
+		z-index: 3
+
+.gm-ui
+	position: absolute
+	display: flex
+	justify-content: space-between
+	align-items: center
+	width: $stage-width - 2*$ui-offset
+	margin: 0 $ui-offset
+	transform: translate(0, -100%)
+
+.ui-sliders
+
+	&> *:first-child
+		margin-bottom: $prim-space
+
+	div
+		+engraved-text()
+		display: flex
+		align-items: center
+		height: 25px
+
+	label
+		min-width: 75px
+		text-align: left
+
+#zoom-slider
+	background-size: ($track-width - $thumb-width)/($zoom-range - 1) $thumb-height/2
+
+#speed-slider
+	background-size: ($track-width - $thumb-width)/($speed-range - 1) $thumb-height/2
+
+input[type='range']
+	-webkit-appearance: none
+	@extend .slider-tick-styling
+
+	&::-webkit-slider-thumb
+		-webkit-appearance: none
+
+	&:before
+		@extend .before-setup
+		@extend .slider-track-styling
+
+	&::-webkit-slider-thumb
+		@extend .slider-thumb-styling
+
+.ui-nav-btns
+	&> *:first-child
+		margin-bottom: $prim-space
+
+	button
+		position: absolute
+		border-radius: $prim-space
+
+	.start-btn
+		+metal-btn(black, rgb(60,255,140))
+		+bx-shadow($lt-shadow-top, $drk-shadow-btm)
+
+	.stop-btn
+		+metal-btn(black, rgb(255,92,95))
+		+bx-shadow($lt-shadow-top, $drk-shadow-btm)
+
+	.step-btn
+		+metal-btn(black, rgb(0,173,255))
+		+bx-shadow($lt-shadow-top, $drk-shadow-btm)
+
+.ui-save-reset
+	text-align: right
+
+	&> *:first-child
+		margin-bottom: $prim-space
+
+	div
+		display: flex
+
+	span
+		position: relative
+
+	select
+		+inset-screen-shadow($alpha: 0.8)
+		width: 150px
+		height: 25px
+		border-radius: 0 $prim-space $prim-space 0
+		padding-left: $prim-space
+		margin: 0
+		cursor: pointer
+		background: $prim-color
+		font-family: $head-font
+		font-size: 105%
+		color: $sec-font-color
+
+	button
+		border-radius: $prim-space 0 0 $prim-space
+
+	.reset-comp
+		border-radius: $prim-space
+
+	.reset-btn
+		+metal-btn(black, rgb(255,159,152))
+		+bx-shadow($lt-shadow-top, $drk-shadow-btm)
+
+	.save-comp
+		border-radius: $prim-space
+
+	.save-btn
+		+metal-btn(black, rgb(152,216,250))
+		+bx-shadow($lt-shadow-top, $drk-shadow-btm)
