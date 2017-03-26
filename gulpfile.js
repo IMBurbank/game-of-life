@@ -23,12 +23,15 @@ gulp.task('browserSync', function() {
 gulp.task('sass', function() {
   return gulp.src('app/sass/*.sass')
     .pipe(sass())
+    .pipe(sourcemaps.init())
+    .pipe(postcss([ autoprefixer() ]))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('app/css'))
     .pipe(browserSync.reload({
       stream: true
     }))
 })
-
+/*
 gulp.task('prefix', function() {
   return gulp.src('app/css/*.css')
     .pipe(sourcemaps.init())
@@ -39,7 +42,7 @@ gulp.task('prefix', function() {
       stream: true
     }))
 })
-
+*/
 gulp.task('useref', function(){
   return gulp.src('app/*.html')
     .pipe(useref())
@@ -50,7 +53,6 @@ gulp.task('useref', function(){
 
 gulp.task('watch', ['browserSync', 'sass'], function(){
   gulp.watch('app/sass/*.sass', ['sass']);
-  gulp.watch('app/css/*.css', ['prefix']);
   gulp.watch('app/*.html', browserSync.reload);
   gulp.watch('app/js/**/*.js', browserSync.reload);
   // Other watchers
@@ -61,14 +63,14 @@ gulp.task('clean:dist', function() {
 })
 
 gulp.task('default', function (callback) {
-  runSequence('sass', 'prefix', ['browserSync', 'watch'],
+  runSequence('sass', ['browserSync', 'watch'],
     callback
   )
 })
 
 gulp.task('build', function (callback) {
   runSequence('clean:dist',
-    'sass', 'prefix', ['useref'],
+    'sass', ['useref'],
     callback
   )
 })
